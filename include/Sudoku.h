@@ -44,13 +44,17 @@ private:
 	*/
 
 	//交换两个数
-	void swap(int& a, int& b);
+	inline void swap(int& a, int& b);
 
+	//复制数独盘
+	void copyS(Matrix des[4][4], Matrix src[4][4]);
+	
 	/*
 	解数独部分数据
 	*/
 	
-	queue<Coordinate> que_cood;
+	queue<Coordinate> que_cood; //新确定的单元格的队列，每个单元格变为确定后首先入队
+								//利用其值处理与其相关的未确定单元格的候选队列，每个单元格至多入队一次
 
 	/*
 	解数独部分函数
@@ -62,13 +66,36 @@ private:
 
 	//根据已确定单元格的值排除与其同行，同列，同宫单元格候选值
 	//Sx-九宫格行号 Sy-九宫格列号 x-单元格行号 y-单元格列号
-	void Eliminate(const int Sx, const int Sy, const int x, const int y);
+	void Eliminate_SRC(const int Sx, const int Sy, const int x, const int y);
 
 	//检查唯一可能值，即计算1到9每个值在同行/同列/同宫（确定值+候选列表）出现次数
 	//只出现1次说明包含该值的单元格只能取该值
 	void Check_OnePossbile();
+
+	//计算单元格的分数，用于在回溯法选择较好的单元格进行扩展
+	int score_cell(const int Sx, const int Sy, const int x, const int y);
+
+	//找到评分最高的单元格
+	void find_best_cell(Coordinate &coord);
+
+	//队列不为空时处理队列，直至队列为空
+	void Eliminate_que();
+
+	//对某个单元格使用回溯法尝试确定其值，若成功确定返回true
+	bool Eliminate_bt(const int Sx, const int Sy, const int x, const int y);
+
+	//回溯法解所有未确定单元格
+	void Eliminate();
 	
 public:
+	/*
+	功能函数
+	*/
+
+	//检查数独是否正确，包括是否所有单元格都已确定
+	bool IsRight();
+
+	//解数独
 	void Solve();
 
 	/*
