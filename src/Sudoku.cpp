@@ -143,10 +143,10 @@ bool Sudoku::IsRight()
 		return false;
 
 	//检查每列
-	FOR_EACH_R
+	FOR_EACH_C
 	(
 		memset(occ, false, 10 * sizeof(bool));
-		FOR_EACH_C
+		FOR_EACH_R
 		(
 			int val = S[Sr][Sc].matrix[r][c][0];
 			if (val == 0 || occ[val]) //值为0或已出现过
